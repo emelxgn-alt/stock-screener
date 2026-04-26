@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Stock Screener</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --gold: #f0c040;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  header p { color: var(--muted); font-size: 0.85rem; }
+  .timestamp { margin-left: auto; color: var(--muted); font-size: 0.8rem; }
+  main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+  .market { margin-bottom: 3rem; }
+  .market-header {
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .market-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; }
+  .bench-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.3rem 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; background: var(--surface); }
+  thead th {
+    background: var(--surface2);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  td { padding: 0.7rem 1rem; vertical-align: middle; }
+  td small { color: var(--muted); display: block; font-size: 0.75rem; }
+  .pos { color: var(--green); font-weight: 500; }
+  .neg { color: var(--red); font-weight: 500; }
+  .neu { color: var(--muted); }
+  .na { color: var(--muted); opacity: 0.5; }
+  .stars { color: var(--gold); letter-spacing: 1px; font-size: 1rem; }
+  .legend {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+  }
+  .legend h3 { margin-bottom: 0.75rem; font-family: 'DM Serif Display', serif; }
+  .legend ul { list-style: none; display: grid; gap: 0.4rem; }
+  .legend li { color: var(--muted); font-size: 0.85rem; }
+  .legend li strong { color: var(--text); }
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    td, th { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🌏 Global Stock Screener</h1>
+    <p>Stocks near 52-Week &amp; All-Time Highs · Outperforming their Benchmark</p>
+  </div>
+  <div class="timestamp">Updated: 26 Apr 2026 08:53 UTC</div>
+</header>
+<main>
+
+        <section class="market">
+          <div class="market-header">
+            <h2>🇺🇸 United States</h2>
+            <div class="bench-pill">
+              Benchmark: S&P 500 &nbsp;|&nbsp;
+              1M: <span class='pos'>+10.62%</span> &nbsp;|&nbsp; 3M: <span class='pos'>+3.09%</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>vs 52W High</th>
+                <th>vs ATH</th>
+                <th>1M Return</th>
+                <th>1M vs Benchmark</th>
+                <th>3M Return</th>
+                <th>3M vs Benchmark</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>NVDA</strong><br><small>NVIDIA Corporation</small></td>
+              <td>208.27</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+21.62%</span></td>
+              <td><span class='pos'>+11.0%</span></td>
+              <td><span class='pos'>+11.7%</span></td>
+              <td><span class='pos'>+8.61%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>GOOGL</strong><br><small>Alphabet Inc.</small></td>
+              <td>344.4</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+22.6%</span></td>
+              <td><span class='pos'>+11.98%</span></td>
+              <td><span class='pos'>+3.42%</span></td>
+              <td><span class='pos'>+0.33%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>AMZN</strong><br><small>Amazon.com, Inc.</small></td>
+              <td>263.99</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+27.2%</span></td>
+              <td><span class='pos'>+16.58%</span></td>
+              <td><span class='pos'>+10.72%</span></td>
+              <td><span class='pos'>+7.63%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>AVGO</strong><br><small>Broadcom Inc.</small></td>
+              <td>422.76</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+36.63%</span></td>
+              <td><span class='pos'>+26.01%</span></td>
+              <td><span class='pos'>+30.41%</span></td>
+              <td><span class='pos'>+27.32%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>AAPL</strong><br><small>Apple Inc.</small></td>
+              <td>271.06</td>
+              <td>🟡 <span class='neg'>-5.2%</span></td>
+              <td>🟡 <span class='neg'>-5.2%</span></td>
+              <td><span class='pos'>+7.18%</span></td>
+              <td><span class='neg'>-3.44%</span></td>
+              <td><span class='pos'>+6.23%</span></td>
+              <td><span class='pos'>+3.14%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>MRK</strong><br><small>Merck & Company, Inc.</small></td>
+              <td>111.9</td>
+              <td>🟡 <span class='neg'>-9.16%</span></td>
+              <td>🟡 <span class='neg'>-10.73%</span></td>
+              <td><span class='neg'>-5.91%</span></td>
+              <td><span class='neg'>-16.53%</span></td>
+              <td><span class='pos'>+4.96%</span></td>
+              <td><span class='pos'>+1.87%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>MSFT</strong><br><small>Microsoft Corporation</small></td>
+              <td>424.62</td>
+              <td>🔴 <span class='neg'>-21.34%</span></td>
+              <td>🔴 <span class='neg'>-21.34%</span></td>
+              <td><span class='pos'>+16.03%</span></td>
+              <td><span class='pos'>+5.41%</span></td>
+              <td><span class='neg'>-9.5%</span></td>
+              <td><span class='neg'>-12.59%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>META</strong><br><small>Meta Platforms, Inc.</small></td>
+              <td>675.03</td>
+              <td>🟡 <span class='neg'>-14.35%</span></td>
+              <td>🟡 <span class='neg'>-14.35%</span></td>
+              <td><span class='pos'>+23.28%</span></td>
+              <td><span class='pos'>+12.66%</span></td>
+              <td><span class='pos'>+0.48%</span></td>
+              <td><span class='neg'>-2.61%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>UNH</strong><br><small>UnitedHealth Group Incorporated</small></td>
+              <td>354.92</td>
+              <td>🟡 <span class='neg'>-13.98%</span></td>
+              <td>🔴 <span class='neg'>-41.16%</span></td>
+              <td><span class='pos'>+32.41%</span></td>
+              <td><span class='pos'>+21.79%</span></td>
+              <td><span class='pos'>+1.72%</span></td>
+              <td><span class='neg'>-1.37%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>XOM</strong><br><small>Exxon Mobil Corporation</small></td>
+              <td>148.91</td>
+              <td>🟡 <span class='neg'>-13.16%</span></td>
+              <td>🟡 <span class='neg'>-13.16%</span></td>
+              <td><span class='neg'>-9.99%</span></td>
+              <td><span class='neg'>-20.61%</span></td>
+              <td><span class='pos'>+11.17%</span></td>
+              <td><span class='pos'>+8.08%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>CVX</strong><br><small>Chevron Corporation</small></td>
+              <td>185.21</td>
+              <td>🟡 <span class='neg'>-12.29%</span></td>
+              <td>🟡 <span class='neg'>-12.29%</span></td>
+              <td><span class='neg'>-10.87%</span></td>
+              <td><span class='neg'>-21.49%</span></td>
+              <td><span class='pos'>+11.65%</span></td>
+              <td><span class='pos'>+8.56%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>JPM</strong><br><small>JP Morgan Chase & Co.</small></td>
+              <td>308.28</td>
+              <td>🟡 <span class='neg'>-7.4%</span></td>
+              <td>🟡 <span class='neg'>-7.4%</span></td>
+              <td><span class='pos'>+6.24%</span></td>
+              <td><span class='neg'>-4.38%</span></td>
+              <td><span class='pos'>+2.93%</span></td>
+              <td><span class='neg'>-0.16%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>TSLA</strong><br><small>Tesla, Inc.</small></td>
+              <td>376.3</td>
+              <td>🔴 <span class='neg'>-23.19%</span></td>
+              <td>🔴 <span class='neg'>-23.19%</span></td>
+              <td><span class='pos'>+1.13%</span></td>
+              <td><span class='neg'>-9.49%</span></td>
+              <td><span class='neg'>-13.53%</span></td>
+              <td><span class='neg'>-16.62%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>BRK-B</strong><br><small>Berkshire Hathaway Inc. New</small></td>
+              <td>469.32</td>
+              <td>🟡 <span class='neg'>-13.06%</span></td>
+              <td>🟡 <span class='neg'>-13.06%</span></td>
+              <td><span class='neg'>-1.25%</span></td>
+              <td><span class='neg'>-11.87%</span></td>
+              <td><span class='neg'>-2.93%</span></td>
+              <td><span class='neg'>-6.02%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>V</strong><br><small>Visa Inc.</small></td>
+              <td>309.42</td>
+              <td>🔴 <span class='neg'>-16.63%</span></td>
+              <td>🔴 <span class='neg'>-16.63%</span></td>
+              <td><span class='pos'>+1.27%</span></td>
+              <td><span class='neg'>-9.35%</span></td>
+              <td><span class='neg'>-5.61%</span></td>
+              <td><span class='neg'>-8.7%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>MA</strong><br><small>Mastercard Incorporated</small></td>
+              <td>504.17</td>
+              <td>🔴 <span class='neg'>-15.44%</span></td>
+              <td>🔴 <span class='neg'>-15.44%</span></td>
+              <td><span class='pos'>+0.86%</span></td>
+              <td><span class='neg'>-9.76%</span></td>
+              <td><span class='neg'>-4.23%</span></td>
+              <td><span class='neg'>-7.32%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>HD</strong><br><small>Home Depot, Inc. (The)</small></td>
+              <td>335.89</td>
+              <td>🔴 <span class='neg'>-19.63%</span></td>
+              <td>🔴 <span class='neg'>-19.66%</span></td>
+              <td><span class='pos'>+2.27%</span></td>
+              <td><span class='neg'>-8.35%</span></td>
+              <td><span class='neg'>-12.52%</span></td>
+              <td><span class='neg'>-15.61%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>PG</strong><br><small>Procter & Gamble Company (The)</small></td>
+              <td>148.18</td>
+              <td>🟡 <span class='neg'>-10.71%</span></td>
+              <td>🟡 <span class='neg'>-14.12%</span></td>
+              <td><span class='pos'>+4.83%</span></td>
+              <td><span class='neg'>-5.79%</span></td>
+              <td><span class='neg'>-0.13%</span></td>
+              <td><span class='neg'>-3.22%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>LLY</strong><br><small>Eli Lilly and Company</small></td>
+              <td>883.96</td>
+              <td>🔴 <span class='neg'>-20.23%</span></td>
+              <td>🔴 <span class='neg'>-20.23%</span></td>
+              <td><span class='neg'>-1.45%</span></td>
+              <td><span class='neg'>-12.07%</span></td>
+              <td><span class='neg'>-16.68%</span></td>
+              <td><span class='neg'>-19.77%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>ABBV</strong><br><small>AbbVie Inc.</small></td>
+              <td>198.71</td>
+              <td>🔴 <span class='neg'>-16.76%</span></td>
+              <td>🔴 <span class='neg'>-16.76%</span></td>
+              <td><span class='neg'>-5.1%</span></td>
+              <td><span class='neg'>-15.72%</span></td>
+              <td><span class='neg'>-9.25%</span></td>
+              <td><span class='neg'>-12.34%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr></tbody>
+          </table>
+          </div>
+        </section>
+        <section class="market">
+          <div class="market-header">
+            <h2>🇹🇼 Taiwan</h2>
+            <div class="bench-pill">
+              Benchmark: TAIEX &nbsp;|&nbsp;
+              1M: <span class='pos'>+16.43%</span> &nbsp;|&nbsp; 3M: <span class='pos'>+25.82%</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>vs 52W High</th>
+                <th>vs ATH</th>
+                <th>1M Return</th>
+                <th>1M vs Benchmark</th>
+                <th>3M Return</th>
+                <th>3M vs Benchmark</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>2330.TW</strong><br><small>TAIWAN SEMICONDUCTOR MANUFACTUR</small></td>
+              <td>2185.0</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+18.43%</span></td>
+              <td><span class='pos'>+2.0%</span></td>
+              <td><span class='pos'>+28.19%</span></td>
+              <td><span class='pos'>+2.37%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>2454.TW</strong><br><small>MEDIATEK INC</small></td>
+              <td>2435.0</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+50.31%</span></td>
+              <td><span class='pos'>+33.88%</span></td>
+              <td><span class='pos'>+62.33%</span></td>
+              <td><span class='pos'>+36.51%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>2308.TW</strong><br><small>DELTA ELECTRONIC</small></td>
+              <td>2075.0</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+33.87%</span></td>
+              <td><span class='pos'>+17.44%</span></td>
+              <td><span class='pos'>+95.75%</span></td>
+              <td><span class='pos'>+69.93%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>3711.TW</strong><br><small>ASE TECHNOLOGY HOLDING CO LTD</small></td>
+              <td>496.0</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+40.91%</span></td>
+              <td><span class='pos'>+24.48%</span></td>
+              <td><span class='pos'>+68.42%</span></td>
+              <td><span class='pos'>+42.6%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>2382.TW</strong><br><small>QUANTA COMPUTER</small></td>
+              <td>323.0</td>
+              <td>🟢 <span class='neg'>-5.0%</span></td>
+              <td>🟢 <span class='neg'>-5.0%</span></td>
+              <td><span class='pos'>+13.33%</span></td>
+              <td><span class='neg'>-3.1%</span></td>
+              <td><span class='pos'>+12.94%</span></td>
+              <td><span class='neg'>-12.88%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2303.TW</strong><br><small>UNITED MICRO ELECTRONICS</small></td>
+              <td>74.5</td>
+              <td>🟡 <span class='neg'>-5.22%</span></td>
+              <td>🟡 <span class='neg'>-5.22%</span></td>
+              <td><span class='pos'>+26.06%</span></td>
+              <td><span class='pos'>+9.63%</span></td>
+              <td><span class='pos'>+37.96%</span></td>
+              <td><span class='pos'>+12.14%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2412.TW</strong><br><small>CHUNGHWA TELECOM</small></td>
+              <td>135.5</td>
+              <td>🟢 <span class='neg'>-1.81%</span></td>
+              <td>🟢 <span class='neg'>-1.81%</span></td>
+              <td><span class='pos'>+0.37%</span></td>
+              <td><span class='neg'>-16.06%</span></td>
+              <td><span class='pos'>+1.88%</span></td>
+              <td><span class='neg'>-23.94%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2882.TW</strong><br><small>CATHAY FINANCIAL HLDG CO</small></td>
+              <td>74.9</td>
+              <td>🟡 <span class='neg'>-6.02%</span></td>
+              <td>🟡 <span class='neg'>-6.02%</span></td>
+              <td><span class='pos'>+4.9%</span></td>
+              <td><span class='neg'>-11.53%</span></td>
+              <td><span class='pos'>+0.27%</span></td>
+              <td><span class='neg'>-25.55%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>1301.TW</strong><br><small>FORMOSA PLASTIC</small></td>
+              <td>50.2</td>
+              <td>🟡 <span class='neg'>-7.89%</span></td>
+              <td>🔴 <span class='neg'>-25.29%</span></td>
+              <td><span class='pos'>+9.97%</span></td>
+              <td><span class='neg'>-6.46%</span></td>
+              <td><span class='pos'>+22.29%</span></td>
+              <td><span class='neg'>-3.53%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2886.TW</strong><br><small>MEGA FINANCIAL HOLDING CO</small></td>
+              <td>39.55</td>
+              <td>🟡 <span class='neg'>-7.59%</span></td>
+              <td>🟡 <span class='neg'>-7.59%</span></td>
+              <td><span class='pos'>+1.02%</span></td>
+              <td><span class='neg'>-15.41%</span></td>
+              <td><span class='neg'>-2.35%</span></td>
+              <td><span class='neg'>-28.17%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2891.TW</strong><br><small>CTBC FINANCIAL HOLDINGS COMPANY</small></td>
+              <td>52.9</td>
+              <td>🟡 <span class='neg'>-6.37%</span></td>
+              <td>🟡 <span class='neg'>-6.37%</span></td>
+              <td><span class='pos'>+0.19%</span></td>
+              <td><span class='neg'>-16.24%</span></td>
+              <td><span class='pos'>+7.3%</span></td>
+              <td><span class='neg'>-18.52%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2884.TW</strong><br><small>E SUN FINANCIAL HOLDINGS</small></td>
+              <td>32.55</td>
+              <td>🟡 <span class='neg'>-7.26%</span></td>
+              <td>🟡 <span class='neg'>-7.26%</span></td>
+              <td><span class='pos'>+1.4%</span></td>
+              <td><span class='neg'>-15.03%</span></td>
+              <td><span class='pos'>+0.77%</span></td>
+              <td><span class='neg'>-25.05%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2317.TW</strong><br><small>HON HAI PRECISION INDUSTRY</small></td>
+              <td>221.5</td>
+              <td>🔴 <span class='neg'>-15.46%</span></td>
+              <td>🔴 <span class='neg'>-15.46%</span></td>
+              <td><span class='pos'>+10.75%</span></td>
+              <td><span class='neg'>-5.68%</span></td>
+              <td><span class='neg'>-5.54%</span></td>
+              <td><span class='neg'>-31.36%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2881.TW</strong><br><small>FUBON FINANCIAL HLDG CO LTD</small></td>
+              <td>87.8</td>
+              <td>🟡 <span class='neg'>-10.59%</span></td>
+              <td>🟡 <span class='neg'>-10.59%</span></td>
+              <td><span class='neg'>-1.13%</span></td>
+              <td><span class='neg'>-17.56%</span></td>
+              <td><span class='neg'>-6.4%</span></td>
+              <td><span class='neg'>-32.22%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2002.TW</strong><br><small>CHINA STEEL CORP</small></td>
+              <td>19.0</td>
+              <td>🟡 <span class='neg'>-11.79%</span></td>
+              <td>🔴 <span class='neg'>-22.32%</span></td>
+              <td><span class='neg'>-1.55%</span></td>
+              <td><span class='neg'>-17.98%</span></td>
+              <td><span class='neg'>-2.06%</span></td>
+              <td><span class='neg'>-27.88%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr></tbody>
+          </table>
+          </div>
+        </section>
+        <section class="market">
+          <div class="market-header">
+            <h2>🇨🇳 China</h2>
+            <div class="bench-pill">
+              Benchmark: Shanghai Composite &nbsp;|&nbsp;
+              1M: <span class='pos'>+4.91%</span> &nbsp;|&nbsp; 3M: <span class='neg'>-0.83%</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>vs 52W High</th>
+                <th>vs ATH</th>
+                <th>1M Return</th>
+                <th>1M vs Benchmark</th>
+                <th>3M Return</th>
+                <th>3M vs Benchmark</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>601939.SS</strong><br><small>CHINA CONSTRUCTION BANK</small></td>
+              <td>9.74</td>
+              <td>🟢 <span class='neg'>-1.12%</span></td>
+              <td>🟢 <span class='neg'>-1.12%</span></td>
+              <td><span class='pos'>+3.18%</span></td>
+              <td><span class='neg'>-1.73%</span></td>
+              <td><span class='pos'>+8.95%</span></td>
+              <td><span class='pos'>+9.78%</span></td>
+              <td class='stars' title='Score: 7/9'>★★★☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601088.SS</strong><br><small>CHINA SHENHUA ENERGY COMPANY LT</small></td>
+              <td>47.19</td>
+              <td>🟢 <span class='neg'>-4.76%</span></td>
+              <td>🟢 <span class='neg'>-4.76%</span></td>
+              <td><span class='neg'>-1.05%</span></td>
+              <td><span class='neg'>-5.96%</span></td>
+              <td><span class='pos'>+15.95%</span></td>
+              <td><span class='pos'>+16.78%</span></td>
+              <td class='stars' title='Score: 7/9'>★★★☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>603288.SS</strong><br><small>FOSHAN HAITIAN FLAVOURING AND F</small></td>
+              <td>39.92</td>
+              <td>🟡 <span class='neg'>-8.99%</span></td>
+              <td>🔴 <span class='neg'>-20.25%</span></td>
+              <td><span class='pos'>+8.04%</span></td>
+              <td><span class='pos'>+3.13%</span></td>
+              <td><span class='pos'>+9.16%</span></td>
+              <td><span class='pos'>+9.99%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600519.SS</strong><br><small>KWEICHOW MOUTAI</small></td>
+              <td>1458.49</td>
+              <td>🟡 <span class='neg'>-7.49%</span></td>
+              <td>🟡 <span class='neg'>-12.12%</span></td>
+              <td><span class='pos'>+4.09%</span></td>
+              <td><span class='neg'>-0.82%</span></td>
+              <td><span class='pos'>+5.99%</span></td>
+              <td><span class='pos'>+6.82%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601398.SS</strong><br><small>INDUSTRIAL & COMMERCIAL BK OF C</small></td>
+              <td>7.58</td>
+              <td>🟡 <span class='neg'>-7.14%</span></td>
+              <td>🟡 <span class='neg'>-7.14%</span></td>
+              <td><span class='pos'>+2.16%</span></td>
+              <td><span class='neg'>-2.75%</span></td>
+              <td><span class='pos'>+0.66%</span></td>
+              <td><span class='pos'>+1.49%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600036.SS</strong><br><small>CHINA MERCHANTS BANK CO LTD</small></td>
+              <td>39.38</td>
+              <td>🟡 <span class='neg'>-12.63%</span></td>
+              <td>🟡 <span class='neg'>-12.63%</span></td>
+              <td><span class='neg'>-0.46%</span></td>
+              <td><span class='neg'>-5.37%</span></td>
+              <td><span class='pos'>+2.15%</span></td>
+              <td><span class='pos'>+2.98%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601288.SS</strong><br><small>AGRICULTURAL BANK OF CHINA</small></td>
+              <td>7.04</td>
+              <td>🔴 <span class='neg'>-16.76%</span></td>
+              <td>🔴 <span class='neg'>-16.76%</span></td>
+              <td><span class='pos'>+8.14%</span></td>
+              <td><span class='pos'>+3.23%</span></td>
+              <td><span class='neg'>-0.85%</span></td>
+              <td><span class='neg'>-0.02%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600276.SS</strong><br><small>JIANGSU HENGRUI PHARMACEUTICALS</small></td>
+              <td>56.05</td>
+              <td>🔴 <span class='neg'>-22.66%</span></td>
+              <td>🔴 <span class='neg'>-22.66%</span></td>
+              <td><span class='pos'>+8.56%</span></td>
+              <td><span class='pos'>+3.65%</span></td>
+              <td><span class='neg'>-8.3%</span></td>
+              <td><span class='neg'>-7.47%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600900.SS</strong><br><small>CHINA YANGTZE POWER CO</small></td>
+              <td>26.81</td>
+              <td>🟡 <span class='neg'>-10.97%</span></td>
+              <td>🟡 <span class='neg'>-10.97%</span></td>
+              <td><span class='neg'>-1.83%</span></td>
+              <td><span class='neg'>-6.74%</span></td>
+              <td><span class='pos'>+0.84%</span></td>
+              <td><span class='pos'>+1.67%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600030.SS</strong><br><small>CITIC SECURITIES CO LTD</small></td>
+              <td>26.23</td>
+              <td>🔴 <span class='neg'>-17.54%</span></td>
+              <td>🔴 <span class='neg'>-22.74%</span></td>
+              <td><span class='pos'>+8.7%</span></td>
+              <td><span class='pos'>+3.79%</span></td>
+              <td><span class='neg'>-5.04%</span></td>
+              <td><span class='neg'>-4.21%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601166.SS</strong><br><small>INDUSTRIAL BANK CO LTD</small></td>
+              <td>18.18</td>
+              <td>🔴 <span class='neg'>-25.51%</span></td>
+              <td>🔴 <span class='neg'>-25.51%</span></td>
+              <td><span class='neg'>-3.71%</span></td>
+              <td><span class='neg'>-8.62%</span></td>
+              <td><span class='neg'>-6.74%</span></td>
+              <td><span class='neg'>-5.91%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601628.SS</strong><br><small>CHINA LIFE INSURANCE CO LTD</small></td>
+              <td>36.78</td>
+              <td>🔴 <span class='neg'>-27.92%</span></td>
+              <td>🔴 <span class='neg'>-27.92%</span></td>
+              <td><span class='neg'>-2.54%</span></td>
+              <td><span class='neg'>-7.45%</span></td>
+              <td><span class='neg'>-22.6%</span></td>
+              <td><span class='neg'>-21.77%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600887.SS</strong><br><small>INNER MONGOLIA YILI INDS. GP CO</small></td>
+              <td>25.25</td>
+              <td>🟡 <span class='neg'>-13.63%</span></td>
+              <td>🟡 <span class='neg'>-13.63%</span></td>
+              <td><span class='neg'>-2.7%</span></td>
+              <td><span class='neg'>-7.61%</span></td>
+              <td><span class='neg'>-6.79%</span></td>
+              <td><span class='neg'>-5.96%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>601318.SS</strong><br><small>PING AN INSURANCE(GROUP)CO.OF C</small></td>
+              <td>57.78</td>
+              <td>🔴 <span class='neg'>-22.26%</span></td>
+              <td>🔴 <span class='neg'>-22.26%</span></td>
+              <td><span class='pos'>+1.73%</span></td>
+              <td><span class='neg'>-3.18%</span></td>
+              <td><span class='neg'>-12.85%</span></td>
+              <td><span class='neg'>-12.02%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>600585.SS</strong><br><small>ANHUI CONCH CEMENT</small></td>
+              <td>21.4</td>
+              <td>🔴 <span class='neg'>-20.42%</span></td>
+              <td>🔴 <span class='neg'>-20.42%</span></td>
+              <td><span class='neg'>-6.67%</span></td>
+              <td><span class='neg'>-11.58%</span></td>
+              <td><span class='neg'>-4.08%</span></td>
+              <td><span class='neg'>-3.25%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr></tbody>
+          </table>
+          </div>
+        </section>
+        <section class="market">
+          <div class="market-header">
+            <h2>🇭🇰 Hong Kong</h2>
+            <div class="bench-pill">
+              Benchmark: Hang Seng Index &nbsp;|&nbsp;
+              1M: <span class='pos'>+3.65%</span> &nbsp;|&nbsp; 3M: <span class='neg'>-1.92%</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>vs 52W High</th>
+                <th>vs ATH</th>
+                <th>1M Return</th>
+                <th>1M vs Benchmark</th>
+                <th>3M Return</th>
+                <th>3M vs Benchmark</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>0005.HK</strong><br><small>HSBC HOLDINGS</small></td>
+              <td>140.0</td>
+              <td>🟢 <span class='neg'>-2.78%</span></td>
+              <td>🟢 <span class='neg'>-2.78%</span></td>
+              <td><span class='pos'>+13.27%</span></td>
+              <td><span class='pos'>+9.62%</span></td>
+              <td><span class='pos'>+12.0%</span></td>
+              <td><span class='pos'>+13.92%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>1398.HK</strong><br><small>ICBC</small></td>
+              <td>7.26</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+11.52%</span></td>
+              <td><span class='pos'>+7.87%</span></td>
+              <td><span class='pos'>+15.06%</span></td>
+              <td><span class='pos'>+16.98%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>0939.HK</strong><br><small>CCB</small></td>
+              <td>8.95</td>
+              <td>🟢 <span class='neg'>-0.11%</span></td>
+              <td>🟢 <span class='neg'>-0.11%</span></td>
+              <td><span class='pos'>+12.3%</span></td>
+              <td><span class='pos'>+8.65%</span></td>
+              <td><span class='pos'>+15.34%</span></td>
+              <td><span class='pos'>+17.26%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>0002.HK</strong><br><small>CLP HOLDINGS</small></td>
+              <td>75.4</td>
+              <td>🟢 <span class='neg'>-0.85%</span></td>
+              <td>🟢 <span class='neg'>-0.85%</span></td>
+              <td><span class='pos'>+3.86%</span></td>
+              <td><span class='pos'>+0.21%</span></td>
+              <td><span class='pos'>+5.35%</span></td>
+              <td><span class='pos'>+7.27%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>0941.HK</strong><br><small>CHINA MOBILE</small></td>
+              <td>83.9</td>
+              <td>🟡 <span class='neg'>-5.57%</span></td>
+              <td>🟡 <span class='neg'>-5.57%</span></td>
+              <td><span class='pos'>+7.56%</span></td>
+              <td><span class='pos'>+3.91%</span></td>
+              <td><span class='pos'>+5.8%</span></td>
+              <td><span class='pos'>+7.72%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0016.HK</strong><br><small>SHK PPT</small></td>
+              <td>136.9</td>
+              <td>🟡 <span class='neg'>-5.57%</span></td>
+              <td>🟡 <span class='neg'>-5.57%</span></td>
+              <td><span class='pos'>+4.34%</span></td>
+              <td><span class='pos'>+0.69%</span></td>
+              <td><span class='pos'>+25.11%</span></td>
+              <td><span class='pos'>+27.03%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0388.HK</strong><br><small>HKEX</small></td>
+              <td>411.6</td>
+              <td>🟡 <span class='neg'>-8.7%</span></td>
+              <td>🟡 <span class='neg'>-8.7%</span></td>
+              <td><span class='pos'>+5.11%</span></td>
+              <td><span class='pos'>+1.46%</span></td>
+              <td><span class='neg'>-2.07%</span></td>
+              <td><span class='neg'>-0.15%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0883.HK</strong><br><small>CNOOC</small></td>
+              <td>27.9</td>
+              <td>🟡 <span class='neg'>-8.52%</span></td>
+              <td>🟡 <span class='neg'>-8.52%</span></td>
+              <td><span class='neg'>-5.23%</span></td>
+              <td><span class='neg'>-8.88%</span></td>
+              <td><span class='pos'>+29.65%</span></td>
+              <td><span class='pos'>+31.57%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0003.HK</strong><br><small>HK & CHINA GAS</small></td>
+              <td>7.26</td>
+              <td>🟡 <span class='neg'>-6.32%</span></td>
+              <td>🟡 <span class='neg'>-6.32%</span></td>
+              <td><span class='pos'>+1.82%</span></td>
+              <td><span class='neg'>-1.83%</span></td>
+              <td><span class='pos'>+0.83%</span></td>
+              <td><span class='pos'>+2.75%</span></td>
+              <td class='stars' title='Score: 3/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>1299.HK</strong><br><small>AIA</small></td>
+              <td>81.65</td>
+              <td>🟡 <span class='neg'>-10.23%</span></td>
+              <td>🟡 <span class='neg'>-10.23%</span></td>
+              <td><span class='neg'>-4.05%</span></td>
+              <td><span class='neg'>-7.7%</span></td>
+              <td><span class='neg'>-1.45%</span></td>
+              <td><span class='pos'>+0.47%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>3690.HK</strong><br><small>MEITUAN-W</small></td>
+              <td>82.45</td>
+              <td>🔴 <span class='neg'>-44.44%</span></td>
+              <td>🔴 <span class='neg'>-61.36%</span></td>
+              <td><span class='pos'>+4.37%</span></td>
+              <td><span class='pos'>+0.72%</span></td>
+              <td><span class='neg'>-15.31%</span></td>
+              <td><span class='neg'>-13.39%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0700.HK</strong><br><small>TENCENT</small></td>
+              <td>493.4</td>
+              <td>🔴 <span class='neg'>-27.17%</span></td>
+              <td>🔴 <span class='neg'>-27.17%</span></td>
+              <td><span class='neg'>-4.01%</span></td>
+              <td><span class='neg'>-7.66%</span></td>
+              <td><span class='neg'>-17.9%</span></td>
+              <td><span class='neg'>-15.98%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>2318.HK</strong><br><small>PING AN</small></td>
+              <td>60.95</td>
+              <td>🔴 <span class='neg'>-17.02%</span></td>
+              <td>🔴 <span class='neg'>-17.02%</span></td>
+              <td><span class='pos'>+2.44%</span></td>
+              <td><span class='neg'>-1.21%</span></td>
+              <td><span class='neg'>-11.67%</span></td>
+              <td><span class='neg'>-9.75%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0012.HK</strong><br><small>HENDERSON LAND</small></td>
+              <td>30.36</td>
+              <td>🟡 <span class='neg'>-14.33%</span></td>
+              <td>🟡 <span class='neg'>-14.33%</span></td>
+              <td><span class='neg'>-1.11%</span></td>
+              <td><span class='neg'>-4.76%</span></td>
+              <td><span class='neg'>-2.44%</span></td>
+              <td><span class='neg'>-0.52%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>0027.HK</strong><br><small>GALAXY ENT</small></td>
+              <td>33.18</td>
+              <td>🔴 <span class='neg'>-24.42%</span></td>
+              <td>🔴 <span class='neg'>-24.42%</span></td>
+              <td><span class='neg'>-6.22%</span></td>
+              <td><span class='neg'>-9.87%</span></td>
+              <td><span class='neg'>-17.91%</span></td>
+              <td><span class='neg'>-15.99%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr></tbody>
+          </table>
+          </div>
+        </section>
+        <section class="market">
+          <div class="market-header">
+            <h2>🇸🇬 Singapore</h2>
+            <div class="bench-pill">
+              Benchmark: Straits Times Index &nbsp;|&nbsp;
+              1M: <span class='pos'>+0.72%</span> &nbsp;|&nbsp; 3M: <span class='pos'>+0.64%</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>vs 52W High</th>
+                <th>vs ATH</th>
+                <th>1M Return</th>
+                <th>1M vs Benchmark</th>
+                <th>3M Return</th>
+                <th>3M vs Benchmark</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><strong>O39.SI</strong><br><small>OCBC Bank</small></td>
+              <td>21.71</td>
+              <td>🟢 <span class='neg'>-2.61%</span></td>
+              <td>🟢 <span class='neg'>-2.61%</span></td>
+              <td><span class='pos'>+3.54%</span></td>
+              <td><span class='pos'>+2.82%</span></td>
+              <td><span class='pos'>+4.66%</span></td>
+              <td><span class='pos'>+4.02%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>BS6.SI</strong><br><small>YZJ Shipbldg SGD</small></td>
+              <td>4.33</td>
+              <td>🟢 <span class='neg'>-3.78%</span></td>
+              <td>🟢 <span class='neg'>-3.78%</span></td>
+              <td><span class='pos'>+12.47%</span></td>
+              <td><span class='pos'>+11.75%</span></td>
+              <td><span class='pos'>+29.64%</span></td>
+              <td><span class='pos'>+29.0%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>F34.SI</strong><br><small>Wilmar Intl</small></td>
+              <td>3.88</td>
+              <td>🟢 <span class='neg'>-2.76%</span></td>
+              <td>🟢 <span class='neg'>-2.76%</span></td>
+              <td><span class='pos'>+4.58%</span></td>
+              <td><span class='pos'>+3.86%</span></td>
+              <td><span class='pos'>+19.75%</span></td>
+              <td><span class='pos'>+19.11%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>S68.SI</strong><br><small>SGX</small></td>
+              <td>21.73</td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td>🟢 <span class='neu'>0.0%</span></td>
+              <td><span class='pos'>+11.32%</span></td>
+              <td><span class='pos'>+10.6%</span></td>
+              <td><span class='pos'>+24.75%</span></td>
+              <td><span class='pos'>+24.11%</span></td>
+              <td class='stars' title='Score: 9/9'>★★★★☆</td>
+            </tr>
+            <tr>
+              <td><strong>D05.SI</strong><br><small>DBS</small></td>
+              <td>56.9</td>
+              <td>🟢 <span class='neg'>-3.47%</span></td>
+              <td>🟢 <span class='neg'>-3.47%</span></td>
+              <td><span class='pos'>+1.04%</span></td>
+              <td><span class='pos'>+0.32%</span></td>
+              <td><span class='neg'>-1.6%</span></td>
+              <td><span class='neg'>-2.24%</span></td>
+              <td class='stars' title='Score: 7/9'>★★★☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>V03.SI</strong><br><small>Venture</small></td>
+              <td>16.31</td>
+              <td>🟢 <span class='neg'>-3.55%</span></td>
+              <td>🟢 <span class='neg'>-3.55%</span></td>
+              <td><span class='pos'>+4.15%</span></td>
+              <td><span class='pos'>+3.43%</span></td>
+              <td><span class='neg'>-1.51%</span></td>
+              <td><span class='neg'>-2.15%</span></td>
+              <td class='stars' title='Score: 7/9'>★★★☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>C52.SI</strong><br><small>ComfortDelGro</small></td>
+              <td>1.51</td>
+              <td>🟡 <span class='neg'>-5.48%</span></td>
+              <td>🟡 <span class='neg'>-5.48%</span></td>
+              <td><span class='pos'>+4.86%</span></td>
+              <td><span class='pos'>+4.14%</span></td>
+              <td><span class='pos'>+2.72%</span></td>
+              <td><span class='pos'>+2.08%</span></td>
+              <td class='stars' title='Score: 5/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>U96.SI</strong><br><small>Sembcorp Ind</small></td>
+              <td>6.81</td>
+              <td>🟡 <span class='neg'>-11.99%</span></td>
+              <td>🟡 <span class='neg'>-11.99%</span></td>
+              <td><span class='pos'>+6.57%</span></td>
+              <td><span class='pos'>+5.85%</span></td>
+              <td><span class='pos'>+13.69%</span></td>
+              <td><span class='pos'>+13.05%</span></td>
+              <td class='stars' title='Score: 4/9'>★★☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>Z74.SI</strong><br><small>Singtel</small></td>
+              <td>4.63</td>
+              <td>🟡 <span class='neg'>-11.13%</span></td>
+              <td>🟡 <span class='neg'>-11.13%</span></td>
+              <td><span class='neg'>-6.46%</span></td>
+              <td><span class='neg'>-7.18%</span></td>
+              <td><span class='pos'>+4.28%</span></td>
+              <td><span class='pos'>+3.64%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>BN4.SI</strong><br><small>Keppel</small></td>
+              <td>11.55</td>
+              <td>🟡 <span class='neg'>-12.3%</span></td>
+              <td>🟡 <span class='neg'>-12.3%</span></td>
+              <td><span class='neg'>-5.87%</span></td>
+              <td><span class='neg'>-6.59%</span></td>
+              <td><span class='pos'>+4.81%</span></td>
+              <td><span class='pos'>+4.17%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>C09.SI</strong><br><small>CityDev</small></td>
+              <td>8.51</td>
+              <td>🟡 <span class='neg'>-14.9%</span></td>
+              <td>🟡 <span class='neg'>-14.9%</span></td>
+              <td><span class='pos'>+2.78%</span></td>
+              <td><span class='pos'>+2.06%</span></td>
+              <td><span class='neg'>-7.6%</span></td>
+              <td><span class='neg'>-8.24%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>G13.SI</strong><br><small>Genting Sing</small></td>
+              <td>0.7</td>
+              <td>🟡 <span class='neg'>-12.96%</span></td>
+              <td>🔴 <span class='neg'>-17.95%</span></td>
+              <td><span class='pos'>+4.44%</span></td>
+              <td><span class='pos'>+3.72%</span></td>
+              <td><span class='neg'>-3.42%</span></td>
+              <td><span class='neg'>-4.06%</span></td>
+              <td class='stars' title='Score: 2/9'>★☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>U11.SI</strong><br><small>UOB</small></td>
+              <td>36.0</td>
+              <td>🟡 <span class='neg'>-7.07%</span></td>
+              <td>🟡 <span class='neg'>-7.07%</span></td>
+              <td><span class='pos'>+0.07%</span></td>
+              <td><span class='neg'>-0.65%</span></td>
+              <td><span class='neg'>-7.07%</span></td>
+              <td><span class='neg'>-7.71%</span></td>
+              <td class='stars' title='Score: 1/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>H78.SI</strong><br><small>HongkongLand USD</small></td>
+              <td>7.66</td>
+              <td>🟡 <span class='neg'>-11.2%</span></td>
+              <td>🟡 <span class='neg'>-11.2%</span></td>
+              <td><span class='neg'>-2.54%</span></td>
+              <td><span class='neg'>-3.26%</span></td>
+              <td><span class='neg'>-4.13%</span></td>
+              <td><span class='neg'>-4.77%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr>
+            <tr>
+              <td><strong>J36.SI</strong><br><small>JMH USD</small></td>
+              <td>70.94</td>
+              <td>🟡 <span class='neg'>-12.02%</span></td>
+              <td>🟡 <span class='neg'>-12.02%</span></td>
+              <td><span class='neg'>-4.42%</span></td>
+              <td><span class='neg'>-5.14%</span></td>
+              <td><span class='neg'>-2.93%</span></td>
+              <td><span class='neg'>-3.57%</span></td>
+              <td class='stars' title='Score: 0/9'>☆☆☆☆☆</td>
+            </tr></tbody>
+          </table>
+          </div>
+        </section>
+
+    <section class="legend">
+      <h3>📖 How to read this</h3>
+      <ul>
+        <li><strong>vs 52W High</strong> — How far the stock is from its highest price in the past year. 0% means it's AT the high right now!</li>
+        <li><strong>vs ATH</strong> — How far from its all-time highest price ever recorded.</li>
+        <li><strong>1M / 3M Return</strong> — How much the stock went up (green) or down (red) in the last 1 or 3 months.</li>
+        <li><strong>vs Benchmark</strong> — Is this stock beating its country's index? Green = YES, beating the market 🎉</li>
+        <li><strong>Rating ★</strong> — Overall score. More stars = near highs AND beating the market.</li>
+        <li>🟢 = within 5% of high &nbsp; 🟡 = within 15% &nbsp; 🔴 = more than 15% below high</li>
+      </ul>
+    </section>
+</main>
+<footer>
+  Data sourced from Yahoo Finance via yfinance · For informational purposes only · Not financial advice<br>
+  Auto-refreshed daily by GitHub Actions
+</footer>
+</body>
+</html>
