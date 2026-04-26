@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Stock Screener</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg:#0d1117; --surface:#161b22; --s2:#21262d; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff;
+  --green:#3fb950; --red:#f85149; --gold:#f0c040; --surge:#ff6b35;
+  --green-dim:#1a3a1f; --red-dim:#3a1a1a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.6;min-height:100vh}
+
+/* ── HEADER ── */
+header{background:linear-gradient(135deg,#0d1117,#161b22);border-bottom:1px solid var(--border);padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+header h1{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--accent)}
+header p{font-size:11px;color:var(--muted);margin-top:2px}
+.ts{font-size:11px;color:var(--muted);background:var(--s2);padding:3px 10px;border-radius:20px;border:1px solid var(--border);white-space:nowrap}
+
+/* ── NAV TABS ── */
+.nav-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;padding:0 1rem}
+.nav-tab{padding:.55rem 1rem;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.nav-tab:hover:not(.active){color:var(--text)}
+
+/* ── PANELS ── */
+.panel{display:none;padding:1rem 1.5rem 2rem}
+.panel.active{display:block}
+
+/* ── BENCH BAR ── */
+.bench-bar{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;padding:.55rem 1rem;background:var(--s2);border-radius:8px;border:1px solid var(--border);font-size:11px}
+.bl{color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.bn{font-weight:500;font-size:12px}
+.bsep{color:var(--border)}
+.surge-ct{color:var(--surge);font-weight:600}
+
+/* ── SUBTABS ── */
+.subtabs{display:flex;gap:.4rem;margin-bottom:.8rem}
+.subtab{padding:.3rem .9rem;font-size:11px;border-radius:20px;border:1px solid var(--border);cursor:pointer;color:var(--muted);background:var(--s2);transition:all .15s}
+.subtab.active{background:var(--accent);color:#0d1117;border-color:var(--accent);font-weight:500}
+.subtab-panel{display:none}
+.subtab-panel.active{display:block}
+.cpill{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0 5px;font-size:9px;margin-left:3px}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.chart-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:.5rem}
+.chart-legend{display:flex;gap:1rem;font-size:10px;color:var(--muted);margin-bottom:.4rem;flex-wrap:wrap}
+.chart-legend span{display:flex;align-items:center;gap:4px}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── TABLE ── */
+.controls{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;flex-wrap:wrap}
+.sort-label{font-size:11px;color:var(--muted)}
+select.sort-sel{background:var(--s2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer}
+.search-box{background:var(--s2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:11px;width:160px}
+.search-box::placeholder{color:var(--muted)}
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;background:var(--surface)}
+thead th{background:var(--s2);padding:.5rem .8rem;text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;position:sticky;top:0}
+thead th:hover{color:var(--text)}
+thead th .sort-arrow{opacity:.4;margin-left:3px;font-size:9px}
+thead th.sorted .sort-arrow{opacity:1;color:var(--accent)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--s2)}
+tbody tr.surge-row{background:#ff6b350a}
+td{padding:.5rem .8rem;vertical-align:middle}
+td small{color:var(--muted);display:block;font-size:10px}
+.pos{color:var(--green);font-weight:500}
+.neg{color:var(--red);font-weight:500}
+.na{color:var(--muted);opacity:.5}
+.stars{color:var(--gold);letter-spacing:1px;font-size:11px}
+.dot-g{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:2px}
+.dot-y{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e3b341;margin-right:2px}
+.dot-r{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:2px}
+.surge-badge{display:inline-block;font-size:9px;background:#ff6b3525;color:#ff8c55;border:1px solid #ff6b3550;border-radius:3px;padding:1px 4px;margin-top:2px}
+.tag-m{font-size:9px;background:#58a6ff18;color:#58a6ff;border:1px solid #58a6ff35;border-radius:3px;padding:1px 4px;margin-right:2px}
+.tag-v{font-size:9px;background:#3fb95018;color:var(--green);border:1px solid #3fb95035;border-radius:3px;padding:1px 4px}
+.spark{width:60px;height:28px;display:inline-block}
+.surge-explain{background:#ff6b3510;border:1px solid #ff6b3530;border-radius:8px;padding:.6rem 1rem;margin-bottom:.8rem;font-size:11px;color:#ffb347}
+
+/* ── SECTOR PANEL ── */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin-bottom:1.5rem}
+.sector-tile{border-radius:8px;padding:.7rem .8rem;text-align:center;border:1px solid var(--border);transition:transform .1s}
+.sector-tile:hover{transform:translateY(-2px)}
+.tile-etf{font-size:10px;color:var(--muted);margin-bottom:2px}
+.tile-name{font-size:11px;font-weight:500;margin-bottom:6px;line-height:1.2}
+.tile-r1m{font-size:1.1rem;font-weight:600;margin-bottom:2px}
+.tile-sub{font-size:9px;color:var(--muted)}
+.tile-vs{font-size:10px;margin-top:3px}
+.sector-charts{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.sec-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:1rem}
+
+/* ── LEGEND ── */
+.legend{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-top:1rem}
+.legend h3{font-family:'DM Serif Display',serif;font-size:14px;margin-bottom:.6rem}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .8rem;font-size:11px;color:var(--muted)}
+.legend-grid b{color:var(--text)}
+
+footer{text-align:center;padding:1.2rem;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:1rem}
+@media(max-width:640px){.charts-row,.sector-charts,.sector-grid{grid-template-columns:1fr}.legend-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌏 Global Stock Screener</h1>
+    <p>Top 50 Market Cap + Top 50 Volume · 52W &amp; ATH Highs · Benchmark Outperformance · 🔥 Volume Surges</p>
+  </div>
+  <div class="ts" id="ts">Loading…</div>
+</header>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showPanel('sectors',this)">📊 US Sectors</div>
+  <div class="nav-tab" onclick="showPanel('us',this)">🇺🇸 United States</div>
+  <div class="nav-tab" onclick="showPanel('tw',this)">🇹🇼 Taiwan</div>
+  <div class="nav-tab" onclick="showPanel('cn',this)">🇨🇳 China</div>
+  <div class="nav-tab" onclick="showPanel('hk',this)">🇭🇰 Hong Kong</div>
+  <div class="nav-tab" onclick="showPanel('sg',this)">🇸🇬 Singapore</div>
+</div>
+
+<!-- SECTOR PANEL -->
+<div id="panel-sectors" class="panel active">
+  <div id="sector-content">Loading sector data…</div>
+</div>
+
+<!-- MARKET PANELS -->
+<div id="panel-us" class="panel"></div>
+<div id="panel-tw" class="panel"></div>
+<div id="panel-cn" class="panel"></div>
+<div id="panel-hk" class="panel"></div>
+<div id="panel-sg" class="panel"></div>
+
+<footer>Data from Yahoo Finance · Not financial advice · Auto-refreshed daily via GitHub Actions</footer>
+
+<script>
+// ── DATA injected by screener.py ──
+const RAW = __DATA_PLACEHOLDER__;
+
+// ── CHART REGISTRY (destroy before re-create) ──
+const chartReg = {};
+function mkChart(id, cfg) {
+  if (chartReg[id]) { chartReg[id].destroy(); }
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  chartReg[id] = new Chart(ctx, cfg);
+}
+
+// ── UTILITIES ──
+const fmt = (v, d=1) => v == null ? '—' :
+  `<span class="${v>0?'pos':v<0?'neg':'na'}">${v>0?'+':''}${(+v).toFixed(d)}%</span>`;
+const fmtPlain = (v, d=1) => v == null ? '—' :
+  `${v>0?'+':''}${(+v).toFixed(d)}%`;
+const dot = p => p>=−5 ? '<span class="dot-g"></span>' : p>=−15 ? '<span class="dot-y"></span>' : '<span class="dot-r"></span>';
+const stars = s => { const f=Math.min(Math.floor(s/2),5); return '★'.repeat(f)+'☆'.repeat(5-f); };
+const volFmt = v => { if(!v) return '—'; if(v>=1e9) return (v/1e9).toFixed(1)+'B'; if(v>=1e6) return (v/1e6).toFixed(1)+'M'; if(v>=1e3) return (v/1e3).toFixed(0)+'K'; return v; };
+const clamp = (v,mn,mx) => Math.min(Math.max(v,mn),mx);
+
+// ── SPARKLINE (inline SVG) ──
+function sparkline(trend) {
+  if (!trend || trend.length < 2) return '<span class="na">—</span>';
+  const vals = trend.map(d => d.p);
+  const mn = Math.min(...vals), mx = Math.max(...vals);
+  const range = mx - mn || 1;
+  const W = 60, H = 28;
+  const pts = vals.map((v,i) => {
+    const x = (i / (vals.length-1)) * W;
+    const y = H - ((v - mn) / range) * H;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const col = vals[vals.length-1] >= vals[0] ? '#3fb950' : '#f85149';
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+}
+
+// ── COLOUR FOR HEATMAP TILES ──
+function tileColor(v) {
+  if (v == null) return { bg:'#21262d', text:'#8b949e' };
+  const intensity = clamp(Math.abs(v) / 10, 0, 1);
+  if (v > 0) {
+    const g = Math.round(50 + intensity * 100);
+    return { bg:`rgba(40,${g+60},40,${0.3+intensity*0.5})`, text:`#${Math.round(40+intensity*90).toString(16).padStart(2,'0')}dd${Math.round(40+intensity*90).toString(16).padStart(2,'0')}` };
+  } else {
+    const r = Math.round(50 + intensity * 100);
+    return { bg:`rgba(${r+60},30,30,${0.3+intensity*0.5})`, text:`#dd${Math.round(40+intensity*90).toString(16).padStart(2,'0')}${Math.round(40+intensity*90).toString(16).padStart(2,'0')}` };
+  }
+}
+
+// ────────────────────────────────────────────
+// SECTOR PANEL
+// ────────────────────────────────────────────
+function buildSectors() {
+  const { sectors, spx } = RAW.sectors;
+
+  // Heatmap grid
+  let heatmap = `<h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.7rem">Sector Heatmap <span style="font-size:11px;color:var(--muted);font-family:'DM Sans',sans-serif">— colour = 1M performance vs S&P 500</span></h3>`;
+  heatmap += `<div class="sector-grid">`;
+  sectors.forEach(s => {
+    const c = tileColor(s.vs1);
+    heatmap += `
+    <div class="sector-tile" style="background:${c.bg};border-color:${c.bg}">
+      <div class="tile-etf">${s.ticker}</div>
+      <div class="tile-name">${s.name}</div>
+      <div class="tile-r1m" style="color:${c.text}">${fmtPlain(s.r1m)}</div>
+      <div class="tile-sub">1M return</div>
+      <div class="tile-vs" style="color:${s.vs1>0?'#3fb950':'#f85149'}">
+        ${s.vs1!=null?(s.vs1>0?'▲ ':'▼ ')+Math.abs(s.vs1).toFixed(1)+'% vs S&P':'—'}
+      </div>
+    </div>`;
+  });
+  heatmap += `</div>`;
+
+  // Bar chart — 1M return all sectors vs SPX
+  const chartHtml = `
+  <div class="sector-charts">
+    <div class="chart-card">
+      <div class="chart-title">1-Month Return — Sectors vs S&P 500</div>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="sec-bar-1m" role="img" aria-label="Bar chart of 1-month sector ETF returns vs S&P 500">Sector 1M returns</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">3-Month Return — Sectors vs S&P 500</div>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="sec-bar-3m" role="img" aria-label="Bar chart of 3-month sector ETF returns vs S&P 500">Sector 3M returns</canvas>
+      </div>
+    </div>
+  </div>`;
+
+  // Table
+  let tbl = `
+  <div class="sec-table-wrap">
+  <table>
+    <thead><tr>
+      <th onclick="sortSecTable(0)" id="sth0">Sector <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(1)" id="sth1">ETF <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(2)" id="sth2">Price <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(3,true)" id="sth3">YTD <span class="sort-arrow">↓</span></th>
+      <th onclick="sortSecTable(4,true)" id="sth4">YTD vs S&P <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(5,true)" id="sth5">1M <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(6,true)" id="sth6">1M vs S&P <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(7,true)" id="sth7">3M <span class="sort-arrow">↕</span></th>
+      <th onclick="sortSecTable(8,true)" id="sth8">3M vs S&P <span class="sort-arrow">↕</span></th>
+      <th>3M Trend</th>
+    </tr></thead>
+    <tbody id="sec-tbody">`;
+
+  const spxRow = `<tr style="border-bottom:2px solid var(--accent)">
+    <td><strong>S&amp;P 500</strong><small>Benchmark</small></td>
+    <td>^GSPC</td>
+    <td>—</td>
+    <td>${fmt(spx.ytd)}</td><td><span class="na">—</span></td>
+    <td>${fmt(spx['1m'])}</td><td><span class="na">—</span></td>
+    <td>${fmt(spx['3m'])}</td><td><span class="na">—</span></td>
+    <td></td>
+  </tr>`;
+
+  const secRows = sectors.map(s => `
+    <tr data-vals="${[s.name,s.ticker,s.price,s.rytd,s.vsytd,s.r1m,s.vs1,s.r3m,s.vs3].join('|')}">
+      <td><strong>${s.name}</strong></td>
+      <td>${s.ticker}</td>
+      <td>${s.price}</td>
+      <td>${fmt(s.rytd)}</td>
+      <td>${fmt(s.vsytd)}</td>
+      <td>${fmt(s.r1m)}</td>
+      <td>${fmt(s.vs1)}</td>
+      <td>${fmt(s.r3m)}</td>
+      <td>${fmt(s.vs3)}</td>
+      <td>${sparkline(s.trend)}</td>
+    </tr>`).join('');
+
+  tbl += spxRow + secRows + `</tbody></table></div>`;
+
+  const spxBench = `
+  <div class="bench-bar" style="margin-bottom:1rem">
+    <span class="bl">S&amp;P 500</span>
+    <span class="bn">Benchmark</span><span class="bsep">|</span>
+    <span class="bl">YTD:</span> ${fmt(spx.ytd)}
+    <span class="bsep">|</span>
+    <span class="bl">1M:</span> ${fmt(spx['1m'])}
+    <span class="bsep">|</span>
+    <span class="bl">3M:</span> ${fmt(spx['3m'])}
+  </div>`;
+
+  document.getElementById('sector-content').innerHTML = spxBench + heatmap + chartHtml + tbl + buildLegend();
+
+  // Draw bar charts
+  const labels = sectors.map(s => s.ticker);
+  const colors1m = sectors.map(s => s.r1m >= 0 ? '#3fb950aa' : '#f85149aa');
+  const border1m = sectors.map(s => s.r1m >= 0 ? '#3fb950' : '#f85149');
+  const spx1m = spx['1m'] || 0;
+  const spx3m = spx['3m'] || 0;
+
+  mkChart('sec-bar-1m', {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Sector 1M %', data: sectors.map(s=>s.r1m), backgroundColor:colors1m, borderColor:border1m, borderWidth:1.5, borderRadius:4 },
+      { label:'S&P 500', data: labels.map(()=>spx1m), type:'line', borderColor:'#58a6ff', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y||0).toFixed(1)+'%'}} },
+      scales:{ x:{ticks:{color:'#8b949e',font:{size:10}},grid:{display:false}}, y:{ticks:{color:'#8b949e',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(139,148,158,0.15)'}} }
+    }
+  });
+
+  const colors3m = sectors.map(s => s.r3m >= 0 ? '#58a6ffaa' : '#f85149aa');
+  const border3m = sectors.map(s => s.r3m >= 0 ? '#58a6ff' : '#f85149');
+  mkChart('sec-bar-3m', {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Sector 3M %', data: sectors.map(s=>s.r3m), backgroundColor:colors3m, borderColor:border3m, borderWidth:1.5, borderRadius:4 },
+      { label:'S&P 500', data: labels.map(()=>spx3m), type:'line', borderColor:'#58a6ff', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y||0).toFixed(1)+'%'}} },
+      scales:{ x:{ticks:{color:'#8b949e',font:{size:10}},grid:{display:false}}, y:{ticks:{color:'#8b949e',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(139,148,158,0.15)'}} }
+    }
+  });
+}
+
+// Sector table sort
+let secSortCol = 3, secSortAsc = false;
+function sortSecTable(col, numericDefault=false) {
+  if (secSortCol === col) secSortAsc = !secSortAsc;
+  else { secSortCol = col; secSortAsc = !numericDefault; }
+  const tbody = document.getElementById('sec-tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr[data-vals]'));
+  rows.sort((a,b) => {
+    const av = a.dataset.vals.split('|')[col];
+    const bv = b.dataset.vals.split('|')[col];
+    const an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return secSortAsc ? an-bn : bn-an;
+    return secSortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+  document.querySelectorAll('[id^=sth]').forEach(th => th.classList.remove('sorted'));
+  const th = document.getElementById('sth'+col);
+  if (th) { th.classList.add('sorted'); th.querySelector('.sort-arrow').textContent = secSortAsc ? '↑' : '↓'; }
+}
+
+// ────────────────────────────────────────────
+// MARKET PANEL
+// ────────────────────────────────────────────
+function buildMarket(mkey) {
+  const md = RAW.markets[mkey];
+  if (!md) return;
+  const { label, bench_name, bench, stocks } = md;
+  const surgeCount = stocks.filter(s => s.is_surge).length;
+
+  const benchBar = `
+  <div class="bench-bar">
+    <span class="bl">Benchmark</span><span class="bn">${bench_name}</span><span class="bsep">|</span>
+    <span class="bl">YTD:</span>${fmt(bench.ytd)}
+    <span class="bsep">|</span><span class="bl">1M:</span>${fmt(bench['1m'])}
+    <span class="bsep">|</span><span class="bl">3M:</span>${fmt(bench['3m'])}
+    <span class="bsep">|</span><span class="bl">Screened:</span><span class="bn">${stocks.length}</span>
+    <span class="bsep">|</span><span class="bl">🔥 Surges:</span><span class="surge-ct">${surgeCount}</span>
+  </div>`;
+
+  const chartsHtml = `
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">3-Month Price Trend — Top 8 by Score</div>
+      <div class="chart-legend" id="leg-line-${mkey}"></div>
+      <div style="position:relative;width:100%;height:220px">
+        <canvas id="chart-line-${mkey}" role="img" aria-label="Line chart of 3-month price trends for top stocks">3M trend</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Return vs Volume Surge — bubble = score</div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#3fb950"></span>1M vs Benchmark</span>
+        <span><span class="legend-dot" style="background:#ff6b35"></span>Volume surge</span>
+      </div>
+      <div style="position:relative;width:100%;height:220px">
+        <canvas id="chart-bubble-${mkey}" role="img" aria-label="Bubble chart of return vs volume surge for top stocks">Bubble chart</canvas>
+      </div>
+    </div>
+  </div>`;
+
+  const subtabs = `
+  <div class="subtabs">
+    <div class="subtab active" onclick="showSub(this,'${mkey}','all')">All Stocks <span class="cpill">${stocks.length}</span></div>
+    <div class="subtab" onclick="showSub(this,'${mkey}','surge')">🔥 Volume Surge <span class="cpill">${surgeCount}</span></div>
+  </div>`;
+
+  const thead = `<thead><tr>
+    <th onclick="sortMkt('${mkey}',0)">Stock <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',1)">Price <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',2)">vs 52W <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',3)">vs ATH <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',4)">YTD <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',5)">1M <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',6)">1M vs Bmk <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',7)">3M <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',8)">3M vs Bmk <span class="sort-arrow">↕</span></th>
+    <th onclick="sortMkt('${mkey}',9)">Volume <span class="sort-arrow">↕</span></th>
+    <th>3M Trend</th>
+    <th onclick="sortMkt('${mkey}',11)">Rating <span class="sort-arrow">↓</span></th>
+  </tr></thead>`;
+
+  const makeRows = (surgeOnly) => stocks
+    .filter(s => !surgeOnly || s.is_surge)
+    .map(s => {
+      const tags = (s.in_mcap?'<span class="tag-m">MktCap</span>':'')+(s.in_vol?'<span class="tag-v">Vol</span>':'');
+      const surgeBadge = s.is_surge ? '<br><span class="surge-badge">🔥 VOL SURGE</span>' : '';
+      return `<tr class="${s.is_surge?'surge-row':''}"
+        data-vals="${[s.ticker,s.price,s.p52w,s.path,s.rytd,s.r1m,s.op1,s.r3m,s.op3,s.vol_surge,0,s.score].join('|')}">
+        <td><strong>${s.ticker}</strong><small>${s.name}</small><div style="margin-top:2px">${tags}</div></td>
+        <td>${s.price}</td>
+        <td>${dot(s.p52w)} ${fmt(s.p52w)}</td>
+        <td>${dot(s.path)} ${fmt(s.path)}</td>
+        <td>${fmt(s.rytd)}</td>
+        <td>${fmt(s.r1m)}</td>
+        <td>${fmt(s.op1)}</td>
+        <td>${fmt(s.r3m)}</td>
+        <td>${fmt(s.op3)}</td>
+        <td>${volFmt(s.vol)}<small>avg ${volFmt(s.vol_avg)}</small>${surgeBadge}</td>
+        <td>${sparkline(s.trend)}</td>
+        <td class="stars">${stars(s.score)}</td>
+      </tr>`;
+    }).join('') || `<tr><td colspan="12" style="text-align:center;padding:1.5rem;color:var(--muted)">No stocks match this filter.</td></tr>`;
+
+  const controls = `
+  <div class="controls">
+    <span class="sort-label">Sort by:</span>
+    <select class="sort-sel" onchange="sortMktByKey('${mkey}',this.value)">
+      <option value="11">Rating ★</option>
+      <option value="5">1M Return</option>
+      <option value="7">3M Return</option>
+      <option value="4">YTD Return</option>
+      <option value="6">1M vs Benchmark</option>
+      <option value="2">vs 52W High</option>
+      <option value="9">Volume Surge %</option>
+    </select>
+    <input class="search-box" placeholder="Search ticker / name…" oninput="filterMkt('${mkey}',this.value)">
+  </div>`;
+
+  const allTab = `<div id="${mkey}-all" class="subtab-panel active">
+    ${controls}
+    <div class="table-wrap"><table>${thead}<tbody id="tb-${mkey}-all">${makeRows(false)}</tbody></table></div>
+  </div>`;
+
+  const surgeTab = `<div id="${mkey}-surge" class="subtab-panel">
+    <div class="surge-explain">Stocks where today's volume is <strong>10%+ above</strong> the 20-day average — signals unusual market activity.</div>
+    <div class="table-wrap"><table>${thead}<tbody id="tb-${mkey}-surge">${makeRows(true)}</tbody></table></div>
+  </div>`;
+
+  document.getElementById(`panel-${mkey}`).innerHTML =
+    benchBar + chartsHtml + subtabs + allTab + surgeTab + buildLegend();
+
+  drawMarketCharts(mkey, stocks);
+}
+
+// ── DRAW MARKET CHARTS ──
+const LINE_COLORS = ['#58a6ff','#3fb950','#f0c040','#ff6b35','#c9d1d9','#a371f7','#ff7b72','#39d353'];
+
+function drawMarketCharts(mkey, stocks) {
+  const top8 = stocks.slice(0, 8);
+
+  // Line chart — normalised 3M price trend
+  const datasets = top8.map((s, i) => ({
+    label: s.ticker,
+    data: (s.trend || []).map(d => ({ x: d.d, y: d.p })),
+    borderColor: LINE_COLORS[i % LINE_COLORS.length],
+    borderWidth: 1.5, pointRadius: 0, fill: false, tension: 0.3
+  }));
+
+  const legEl = document.getElementById(`leg-line-${mkey}`);
+  if (legEl) legEl.innerHTML = top8.map((s,i) =>
+    `<span><span class="legend-dot" style="background:${LINE_COLORS[i%LINE_COLORS.length]}"></span>${s.ticker}</span>`
+  ).join('');
+
+  mkChart(`chart-line-${mkey}`, {
+    type:'line',
+    data:{ datasets },
+    options:{ responsive:true, maintainAspectRatio:false,
+      parsing:false,
+      plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false,
+        callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y!=null?(c.parsed.y>0?'+':'')+c.parsed.y.toFixed(1)+'%':'—'}`}} },
+      scales:{
+        x:{ type:'category', ticks:{color:'#8b949e',font:{size:9},maxTicksLimit:6,maxRotation:0}, grid:{display:false} },
+        y:{ ticks:{color:'#8b949e',font:{size:10},callback:v=>v+'%'}, grid:{color:'rgba(139,148,158,0.15)'},
+          title:{display:true,text:'% change (vs 63 days ago)',color:'#8b949e',font:{size:9}} }
+      }
+    }
+  });
+
+  // Bubble chart — x=1M return, y=outperf vs benchmark, r=volume surge (capped)
+  const bubbleData = top8
+    .filter(s => s.r1m != null && s.op1 != null)
+    .map(s => ({
+      x: s.r1m,
+      y: s.op1,
+      r: clamp(Math.abs(s.vol_surge||0)/4, 4, 22),
+      label: s.ticker,
+      surge: s.vol_surge
+    }));
+
+  mkChart(`chart-bubble-${mkey}`, {
+    type:'bubble',
+    data:{ datasets:[{
+      label:'Stocks',
+      data: bubbleData,
+      backgroundColor: bubbleData.map(d => d.y >= 0 ? '#3fb95066' : '#f8514966'),
+      borderColor: bubbleData.map(d => d.y >= 0 ? '#3fb950' : '#f85149'),
+      borderWidth: 1.5
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false},
+        tooltip:{ callbacks:{ label: c => {
+          const d = bubbleData[c.dataIndex];
+          return [`${d.label}`, `1M: ${(d.x||0).toFixed(1)}%`, `vs Bmk: ${(d.y||0).toFixed(1)}%`, `Vol surge: ${d.surge!=null?d.surge.toFixed(0)+'%':'—'}`];
+        }}}
+      },
+      scales:{
+        x:{ ticks:{color:'#8b949e',font:{size:10},callback:v=>v+'%'}, grid:{color:'rgba(139,148,158,0.15)'},
+          title:{display:true,text:'1M Return %',color:'#8b949e',font:{size:9}} },
+        y:{ ticks:{color:'#8b949e',font:{size:10},callback:v=>v+'%'}, grid:{color:'rgba(139,148,158,0.15)'},
+          title:{display:true,text:'1M vs Benchmark %',color:'#8b949e',font:{size:9}} }
+      }
+    }
+  });
+}
+
+// ── SORT ──
+const mktSortState = {};
+function sortMkt(mkey, col) {
+  const st = mktSortState[mkey] || { col:11, asc:false };
+  if (st.col === col) st.asc = !st.asc; else { st.col = col; st.asc = false; }
+  mktSortState[mkey] = st;
+  _applySort(mkey, col, st.asc);
+}
+function sortMktByKey(mkey, col) {
+  col = parseInt(col);
+  mktSortState[mkey] = { col, asc:false };
+  _applySort(mkey, col, false);
+}
+function _applySort(mkey, col, asc) {
+  ['all','surge'].forEach(sub => {
+    const tbody = document.getElementById(`tb-${mkey}-${sub}`);
+    if (!tbody) return;
+    const rows = Array.from(tbody.querySelectorAll('tr[data-vals]'));
+    rows.sort((a,b) => {
+      const av = a.dataset.vals.split('|')[col];
+      const bv = b.dataset.vals.split('|')[col];
+      const an = parseFloat(av), bn = parseFloat(bv);
+      if (!isNaN(an) && !isNaN(bn)) return asc ? an-bn : bn-an;
+      return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  });
+}
+
+// ── SEARCH/FILTER ──
+function filterMkt(mkey, q) {
+  q = q.toLowerCase();
+  const tbody = document.getElementById(`tb-${mkey}-all`);
+  if (!tbody) return;
+  tbody.querySelectorAll('tr[data-vals]').forEach(row => {
+    const vals = row.dataset.vals.toLowerCase();
+    const text = row.textContent.toLowerCase();
+    row.style.display = (!q || text.includes(q) || vals.includes(q)) ? '' : 'none';
+  });
+}
+
+// ── PANEL SWITCH ──
+const built = new Set();
+function showPanel(key, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+key).classList.add('active');
+  el.classList.add('active');
+  if (!built.has(key)) {
+    built.add(key);
+    if (key === 'sectors') buildSectors();
+    else buildMarket(key);
+  }
+}
+
+// ── SUBTAB SWITCH ──
+function showSub(el, mkey, sub) {
+  const panel = document.getElementById('panel-'+mkey);
+  panel.querySelectorAll('.subtab').forEach(t => t.classList.remove('active'));
+  panel.querySelectorAll('.subtab-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(`${mkey}-${sub}`).classList.add('active');
+}
+
+// ── LEGEND ──
+function buildLegend() {
+  return `<div class="legend">
+    <h3>📖 How to read this</h3>
+    <div class="legend-grid">
+      <div><span class="dot-g"></span> <b>Green dot</b> = within 5% of high</div>
+      <div><span class="dot-y"></span> <b>Yellow dot</b> = within 15% of high</div>
+      <div><span class="dot-r"></span> <b>Red dot</b> = more than 15% below high</div>
+      <div><b>vs Benchmark</b> = beating the country index?</div>
+      <div><b>🔥 VOL SURGE</b> = volume 10%+ above 20-day average</div>
+      <div><b>Bubble size</b> = magnitude of volume surge</div>
+      <div><b>Line chart</b> = % change since 63 days ago (normalised)</div>
+      <div><b>MktCap / Vol tags</b> = why this stock is in the list</div>
+      <div><b>Rating ★</b> = composite score: highs + benchmark + surge</div>
+      <div><b>Heatmap</b> = green = outperforming S&P, red = underperforming</div>
+    </div>
+  </div>`;
+}
+
+// ── INIT ──
+document.getElementById('ts').textContent = 'Updated: ' + RAW.updated;
+buildSectors();  // load first visible panel immediately
+built.add('sectors');
+</script>
+</body>
+</html>
